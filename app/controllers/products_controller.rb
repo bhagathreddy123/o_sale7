@@ -1,4 +1,6 @@
 class ProductsController < ApplicationController
+  before_action :require_signin, except: [:index, :show]
+  before_action :require_owner, only: [:edit, :update, :destroy]
   before_action :set_product, except: [:index, :new, :create]
   
   def index
@@ -14,6 +16,7 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
+    @product.user = current_user
     if @product.save
       flash[:notice] = "Product saved"
       redirect_to products_path
@@ -28,6 +31,7 @@ class ProductsController < ApplicationController
 
   def update
     if @product.update(product_params)
+       @product.user = current_user
       redirect_to products_path
       flash[:notice] = "Product updated"
     else
@@ -53,6 +57,13 @@ class ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit!
+  end
+
+  def require_owner
+    unless @product.owned_by?(current_user)
+      flash[:alert] = "Access denied!"
+      redirect_to root_path
+    end
   end
 
 end

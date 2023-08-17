@@ -5,12 +5,12 @@
       <li class="nav-item">
         <%= link_to "Home", root_path, class: "nav-link" %>
       </li>
-      <li class="nav-item">
-        <%= link_to "New Product", new_product_path, class: "nav-link" %>
-      </li>
       <% if current_user %>
       <li class="nav-item">
         <%= link_to "SignOut", session_path, method: :delete, class: "nav-link" %>
+      </li>
+      <li class="nav-item">
+        <%= link_to "New Product", new_product_path, class: "nav-link" %>
       </li>
       <li class="nav-item">
         <p class="navbar-text"> Signin as 
